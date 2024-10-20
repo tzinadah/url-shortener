@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortner</title>
+  </head>
+  <body>
+    <div>
+        <h1>Use the form to add a url to the shortcuts<h1>
+        <h1>You can then use the number associated with url at GET /shorturl/$url-number</h1>
+        <h1>You can get a json file of all available shorthands with GET /shorthands</h1>
+        <form id="url-form">
+          <input id="url-input" type="text" placeholder="enter the url here"/>
+          <button>Submit</button>
+        </form>
+        <div id="result-div"></div>
+    </div>
+
+    <script>
+      const urlForm = document.getElementById('url-form');
+      const urlInput = document.getElementById('url-input');
+      const resultDiv = document.getElementById("result-div");
+      urlForm.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        fetch("/add-url",{
+          method: "POST",
+          headers: {
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify({url: urlInput.value})
+        }).then((res)=> res.json()).then((data) => {resultDiv.innerText=JSON.stringify(data)}).catch((err)=>console.error(err));
+      })
+    </script>
+  </body>
+</html>
